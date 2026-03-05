@@ -4,8 +4,21 @@ import java.util.List;
 
 public class ReportGenerator {
 
-    public void generarReporte(List datos, String formato) {
+    public void generarReporte(List<Object> datos, ReportOutput salida) {
+        imprimirCabecera();
+        int total = calcularTotal(datos);
+        
+        // Delegamos la generación a la estrategia elegida
+        if (salida != null) {
+            salida.generar(total);
+        }
+    }
+
+    private void imprimirCabecera() {
         System.out.println("=== REPORTE ===");
+    }
+
+    private int calcularTotal(List<Object> datos) {
         int total = 0;
         for (Object dato : datos) {
             System.out.println(dato.toString());
@@ -13,12 +26,7 @@ public class ReportGenerator {
                 total += (Integer) dato;
             }
         }
-        System.out.println("Total: " + total);
-        
-        if (formato.equals("pdf")) {
-            System.out.println("Generando PDF...");
-        } else if (formato.equals("excel")) {
-            System.out.println("Generando Excel...");
-        }
+        System.out.println("Total calculado: " + total);
+        return total;
     }
 }
